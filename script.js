@@ -16,11 +16,9 @@ const camera = new THREE.PerspectiveCamera(
 );
 const canvas = document.getElementById("webgl");
 const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
-const backgroundscene = new THREE.Scene();
-const backgroundcamera = new THREE.Camera();
-backgroundscene.add(backgroundcamera);
 
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor('#222222')
 document.body.appendChild(renderer.domElement);
 
 // Handle window resize
@@ -43,15 +41,16 @@ const loader = new GLTFLoader();
 
 loader.load("./fatman/scene.gltf", function (gltf) {
   const fatman = gltf.scene;
-  fatman.rotation.y = Math.PI / 5;
-  fatman.position.set(0, 0, -10); // Set initial position far away
+  fatman.rotation.y = Math.PI / -5;
+  fatman.rotation.x = Math.PI / 5;
+  fatman.position.set(0, -1, -10);
   fatman.scale.set(2, 2, 2);
   scene.add(fatman);
 
   // Animate fatman appearance
   const targetPosition = new THREE.Vector3(0, 0, 0);
   new TWEEN.Tween(fatman.position)
-    .to(targetPosition, 3000) // Adjust the duration as needed
+    .to(targetPosition, 3000)
     .easing(TWEEN.Easing.Quadratic.InOut)
     .start();
 
@@ -70,16 +69,16 @@ camera.lookAt(0, 0, 0);
 function animate() {
   const fatman = scene.getObjectByName("Sketchfab_Scene");
 
-  if (fatman) {
-    fatman.rotation.y += 0.01;
-  }
+  // if (fatman) {
+  //   fatman.rotation.y += 0.01;
+  // }
 
   renderer.autoClear = false;
   renderer.clear();
   renderer.render(scene, camera);
 
   if (fatman && fatman.position.z < 0) {
-    fatman.position.z += 0.09;
+    fatman.position.z += 0.008;
   }
 
   requestAnimationFrame(animate);
