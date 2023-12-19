@@ -100,11 +100,11 @@ function animate() {
   }
 
   if (fatman && fatman.position.z < -2) {
-    fatman.position.z += 0.008;
+    fatman.position.z += 0.0008;
   }
 
   if (littleBoy && littleBoy.position.z < -25) {
-    littleBoy.position.z += 0.008;
+    littleBoy.position.z += 0.0008;
   }
 
   renderer.render(scene, camera);
