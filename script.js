@@ -1,27 +1,116 @@
+console.log("connected");
+
 import * as THREE from "./Three JS/build/three.module.js";
 import { GLTFLoader } from "./Three JS/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "./Three JS/examples/jsm/controls/OrbitControls.js";
 
 const canvas = document.querySelector("canvas.webgl");
 
-// Scene setup
 const scene = new THREE.Scene();
+let fatman, littleBoy;
+// const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
+// const cubeMaterial = new THREE.MeshBasicMaterial({
+//   color: 0xff0000
+// })
+// const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+// scene.add(cube)
+
+const gltfLoader = new GLTFLoader();
+
+// Fatman
+gltfLoader.load("./fatman/scene.gltf", function (gltf) {
+  fatman = gltf.scene;
+  fatman.rotation.y = Math.PI / -5;
+  fatman.rotation.x = Math.PI / 5;
+  fatman.position.set(0, 2, -10);
+  fatman.scale.set(2, 2, 2);
+  scene.add(fatman);
+
+  // Animate fatman appearance
+  const targetPosition = new THREE.Vector3(0, 0, 0);
+  new TWEEN.Tween(fatman.position)
+    .to(targetPosition, 7000)
+    .easing(TWEEN.Easing.Quadratic.InOut)
+    .start();
+
+  animate();
+});
+
+// Little Boy
+gltfLoader.load("./little boy/scene.gltf", function (gltf) {
+  littleBoy = gltf.scene;
+  littleBoy.rotation.y = Math.PI / 4;
+  littleBoy.rotation.x = Math.PI / 8;
+  littleBoy.position.set(0, 2, -30);
+  littleBoy.scale.set(1, 1, 1);
+  // scene.add(littleBoy);
+
+  // Animate littleboy appearance
+  const targetPosition = new THREE.Vector3(0, 0, 0);
+  new TWEEN.Tween(littleBoy.position)
+    .to(targetPosition, 7000)
+    .easing(TWEEN.Easing.Quadratic.InOut)
+    .start();
+
+  animate();
+});
+
 const camera = new THREE.PerspectiveCamera(
-  74,
+  75,
   window.innerWidth / innerHeight,
-  0.1,
-  1000
 );
 
-const renderer = new THREE.WebGLRenderer({ 
-  antialias: true, 
-  canvas: canvas, 
-  alpha: true
+camera.position.x = 0
+camera.position.y = 0
+camera.position.z = 5;
+camera.lookAt(0, 0, 0)
+scene.add(camera);
+
+let scrollY = window.scrollY;
+let currentSection = 0;
+window.addEventListener("scroll", () => {
+  scrollY = window.scrollY;
+  const newSection = Math.random(scrollY / window.innerHeight);
+  console.log(newSection);
+});
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 4);
+scene.add(ambientLight);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  antialias: true,
+  alpha: true,
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor("#222222");
-// document.body.appendChild(renderer.domElement);?
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.addEventListener("change", renderer);
+
+function animate() {
+  requestAnimationFrame(animate);
+  if (fatman) {
+    fatman.rotation.y += 0.001;
+  }
+
+  if (littleBoy) {
+    littleBoy.rotation.y += 0.001;
+  }
+
+  if (fatman && fatman.position.z < -2) {
+    fatman.position.z += 0.008;
+  }
+
+  if (littleBoy && littleBoy.position.z < -25) {
+    littleBoy.position.z += 0.008;
+  }
+
+  renderer.render(scene, camera);
+}
+
+animate();
 
 // Handle window resize
 window.onresize = () => {
@@ -34,63 +123,86 @@ window.onresize = () => {
   camera.updateProjectionMatrix();
 };
 
-// Orbit controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.addEventListener("change", renderer);
+// Orbit Mode
+window.addEventListener("keydown", (event) => {
+  if (event.code === "Space") {
+    fatman.position.set(0, 0, 0)
+    fatman.scale.set(2, 2, 2)
+    littleBoy.position.set(0, 0, -30)
+    const zIndexMain = -1;
+    const zIndexCanvas = 1;
 
-// Load fatman model
-const loader = new GLTFLoader();
+    if (!audio.paused) {
+      audio.pause();
+      isSectionTwoVisible = false;
+      console.log(isSectionTwoVisible);
+      console.log("Audio Pause");
+    }
 
-loader.load("./fatman/scene.gltf", function (gltf) {
-  const fatman = gltf.scene;
-  fatman.rotation.y = Math.PI / -5;
-  fatman.rotation.x = Math.PI / 5;
-  fatman.position.set(0, -1, -10);
-  fatman.scale.set(2, 2, 2);
-  scene.add(fatman);
+    let guide = document.querySelector(".guide > h3");
+    guide.innerHTML = 'Press "Space" to Enter View Mode';
 
-  // Animate fatman appearance
-  // const targetPosition = new THREE.Vector3(0, 0, 0);
-  // new TWEEN.Tween(fatman.position)
-  //   .to(targetPosition, 3000)
-  //   .easing(TWEEN.Easing.Quadratic.InOut)
-  //   .start();
-
-  // animate();
+    canvas.style.zIndex = zIndexCanvas;
+    document.querySelector(".main").style.zIndex = zIndexMain;
+  }
 });
 
-// Ambient light
-const ambientLight = new THREE.AmbientLight(0xffffff, 4);
-scene.add(ambientLight);
+// Reverse Action
+let isOrbitMode = false;
 
-// Camera position
-camera.position.z = 5;
-camera.far = 1000;
-camera.lookAt(0, 0, 0);
+window.addEventListener("keydown", (event) => {
+  if (event.code === "Space") {
+    event.preventDefault();
+    const zIndexMain = -1;
+    const zIndexCanvas = 1;
 
-// Animation loop
-function animate() {
-  const fatman = scene.getObjectByName("Sketchfab_Scene");
-
-  if (fatman) {
-    fatman.rotation.y += 0.01;
-    if(fatman.position.y <= 1)
-    {
-      fatman.position.y += 0.1
+    if (isOrbitMode) {
+      canvas.style.zIndex = zIndexMain;
+      document.querySelector(".main").style.zIndex = zIndexCanvas;
+      camera.position.x = 0
+      camera.position.y = 0
+      camera.position.z = 5;
+      camera.lookAt(0, 0, 0);
+      // fatman.rotation.y = Math.PI / -5;
+      // fatman.rotation.x = Math.PI / 5;
+      // fatman.position.set(0, 1, 50);
+      // fatman.scale.set(8, 8, 8);
+      // littleBoy.rotation.y = Math.PI / 3.9;
+      // littleBoy.rotation.x = Math.PI / 5;
+      // littleBoy.position.set(0, 1, -500);
+      // littleBoy.scale.set(1, 1, 1);
+     
+      let guide = document.querySelector(".guide > h3");
+      guide.innerHTML = 'Press "Space" to Enter Orbit Mode';
+    } else {
+      canvas.style.zIndex = zIndexCanvas;
+      document.querySelector(".main").style.zIndex = zIndexMain;
     }
+
+    isOrbitMode = !isOrbitMode;
   }
+});
 
-
-
-  // renderer.autoClear = false;
-  // renderer.clear();
-  renderer.render(scene, camera);
-
-  if (fatman && fatman.position.z < 0) {
-    fatman.position.z += 0.008;
-  }
-
-  requestAnimationFrame(animate);
+function showLittleBoy() {
+  if (littleBoy) {
+    scene.add(littleBoy);
+    scene.remove(fatman);
+    // orbitMode()
+  } 
 }
 
-animate();
+function showFatman() {
+  if (fatman) {
+    scene.add(fatman);
+    scene.remove(littleBoy);
+    // orbitMode()
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const littleBoyElement = document.querySelector(".little_boy");
+  const fatmanElement = document.querySelector(".fatman");
+
+  littleBoyElement.addEventListener("click", showLittleBoy);
+  fatmanElement.addEventListener("click", showFatman);
+});

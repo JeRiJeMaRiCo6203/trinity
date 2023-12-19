@@ -1,11 +1,11 @@
 Model Information:
-* title:	"Little Boy" - Nuclear bomb
-* source:	https://sketchfab.com/3d-models/little-boy-nuclear-bomb-3b797abe16624ed5bd2cc2607430a76b
-* author:	Warkarma (https://sketchfab.com/warkarma)
+* title:	Nuclear Bomb
+* source:	https://sketchfab.com/3d-models/nuclear-bomb-983f0611b6c54a329b09f3383d26d18a
+* author:	FWTeastwood (https://sketchfab.com/FWTeastwood)
 
 Model License:
 * license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 * requirements:	Author must be credited. Commercial use is allowed.
 
 If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on ""Little Boy" - Nuclear bomb" (https://sketchfab.com/3d-models/little-boy-nuclear-bomb-3b797abe16624ed5bd2cc2607430a76b) by Warkarma (https://sketchfab.com/warkarma) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+This work is based on "Nuclear Bomb" (https://sketchfab.com/3d-models/nuclear-bomb-983f0611b6c54a329b09f3383d26d18a) by FWTeastwood (https://sketchfab.com/FWTeastwood) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

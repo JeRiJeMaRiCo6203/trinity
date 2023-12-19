@@ -18,8 +18,11 @@
       <span style="--i: 7">g</span>
       <span style="--i: 8">.</span>
     </div>
-
-    <main>
+    <div class="guide">
+      <h3>Press "Space" to Enter Orbit Mode</h3>
+    </div>
+    <canvas class="webgl"></canvas>
+    <main class="main">
       <section class="sectionOne">
         <h1>
           <span>T</span>
@@ -84,7 +87,6 @@
           alt=""
         />
       </section>
-      <!-- <canvas class="webgl"></canvas> -->
 
       <section class="sectionFour">
         <img src="" alt="" />
@@ -117,30 +119,40 @@
 
         <div class="bombs">
           <div class="little_boy">
-          <div id="bombTitle">
-            <i>Little Boy</i>
+            <div id="bombTitle">
+              <i>Little Boy</i>
+            </div>
+            <div id="garis">&nbsp;</div>
+            <div id="bombContent">
+              Little Boy adalah bom atom pertama yang dijatuhkan pada 6 Agustus
+              1945, di Hiroshima, Jepang, oleh pesawat B-29 Enola Gay. Dengan
+              desain senjata meriam uranium-235, ledakan ini memainkan peran
+              kunci dalam mengakhiri Perang Dunia II.
+            </div>
           </div>
-          <div id="garis">&nbsp;</div>
-          <div id="bombContent">
-            Little Boy adalah bom atom pertama yang dijatuhkan pada 6 Agustus 1945, di Hiroshima, Jepang, oleh pesawat B-29 Enola Gay. Dengan desain senjata meriam uranium-235, ledakan ini memainkan peran kunci dalam mengakhiri Perang Dunia II.
+
+          <div class="fatman">
+            <div id="bombTitle">
+              <i>Fatman</i>
+            </div>
+            <div id="garis">&nbsp;</div>
+            <div id="bombContent">
+              Fat Man, bom atom kedua, dijatuhkan di Nagasaki pada 9 Agustus
+              1945, oleh pesawat B-29 Bockscar. Menggunakan desain plutonium-239
+              implosif, ledakan Fat Man di Nagasaki berkontribusi pada keputusan
+              Jepang untuk menyerah, menandai akhir Perang Dunia II.
+            </div>
           </div>
         </div>
-        
-        <div class="fatman">
-          <div id="bombTitle">
-            <i>Fatman</i>
-          </div>
-          <div id="garis">&nbsp;</div>
-          <div id="bombContent">
-            Fat Man, bom atom kedua, dijatuhkan di Nagasaki pada 9 Agustus 1945, oleh pesawat B-29 Bockscar. Menggunakan desain plutonium-239 implosif, ledakan Fat Man di Nagasaki berkontribusi pada keputusan Jepang untuk menyerah, menandai akhir Perang Dunia II.
-          </div>
-        </div>
-        </div>
-        
-        
       </section>
     </main>
 
+    <script src="https://unpkg.com/browse/three@0.146.0/build/three.min.js"></script>
+    <!-- <script src="./scrollreveal.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/21.0.0/tween.umd.js"></script>
+    <script src="./script.js" type="module"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         var audio = document.getElementById("backgroundAudio");
@@ -185,12 +197,11 @@
         setTimeout(() => {
           document.querySelector(".waviy").style.display = "none";
           document.body.style.overflowX = "hidden";
+          document.querySelector(".guide").style.display = "block";
           document.querySelector("main").style.display = "block";
-        }, 1000);
+          document.querySelector(".webgl").style.display = "block";
+        }, 7000);
       });
     </script>
-    <script src="./scrollreveal.min.js"></script>
-    <script type="module" src="./script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
   </body>
 </html>
