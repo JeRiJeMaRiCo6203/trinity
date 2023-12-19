@@ -6,6 +6,9 @@ import { OrbitControls } from "./Three JS/examples/jsm/controls/OrbitControls.js
 
 const canvas = document.querySelector("canvas.webgl");
 
+var raycast = new THREE.Raycaster();
+var pointer = new THREE.Vector2();
+
 const scene = new THREE.Scene();
 let fatman, littleBoy;
 // const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -25,11 +28,11 @@ gltfLoader.load("./fatman/scene.gltf", function (gltf) {
   fatman.position.set(0, 2, -10);
   fatman.scale.set(2, 2, 2);
   scene.add(fatman);
-
+  
   // Animate fatman appearance
   const targetPosition = new THREE.Vector3(0, 0, 0);
   new TWEEN.Tween(fatman.position)
-    .to(targetPosition, 7000)
+    .to(targetPosition, 3000)
     .easing(TWEEN.Easing.Quadratic.InOut)
     .start();
 
@@ -41,29 +44,26 @@ gltfLoader.load("./little boy/scene.gltf", function (gltf) {
   littleBoy = gltf.scene;
   littleBoy.rotation.y = Math.PI / 4;
   littleBoy.rotation.x = Math.PI / 8;
-  littleBoy.position.set(0, 2, -30);
+  littleBoy.position.set(0, 2, -40);
   littleBoy.scale.set(1, 1, 1);
   // scene.add(littleBoy);
 
   // Animate littleboy appearance
   const targetPosition = new THREE.Vector3(0, 0, 0);
   new TWEEN.Tween(littleBoy.position)
-    .to(targetPosition, 7000)
+    .to(targetPosition, 3000)
     .easing(TWEEN.Easing.Quadratic.InOut)
     .start();
 
   animate();
 });
 
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / innerHeight,
-);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / innerHeight);
 
-camera.position.x = 0
-camera.position.y = 0
+camera.position.x = 0;
+camera.position.y = 0;
 camera.position.z = 5;
-camera.lookAt(0, 0, 0)
+camera.lookAt(0, 0, 0);
 scene.add(camera);
 
 let scrollY = window.scrollY;
@@ -89,6 +89,24 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.addEventListener("change", renderer);
 
+function onMouseDown(event) {
+  event.preventDefault();
+  // console.log("mouse clicked!");
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycast.setFromCamera(pointer, camera);
+  const intersects = raycast.intersectObjects(scene.children, true);
+  if (intersects.length > 0) {
+    console.log("text clicked!");
+    // finalScene();
+    if (fatman) {
+      fatman.rotation.y -= Math.PI/120
+    }
+  }
+}
+
+document.addEventListener("click", onMouseDown, false);
+
 function animate() {
   requestAnimationFrame(animate);
   if (fatman) {
@@ -100,11 +118,11 @@ function animate() {
   }
 
   if (fatman && fatman.position.z < -2) {
-    fatman.position.z += 0.0008;
+    fatman.position.z += 0.0009;
   }
 
   if (littleBoy && littleBoy.position.z < -25) {
-    littleBoy.position.z += 0.0008;
+    littleBoy.position.z += 0.01;
   }
 
   renderer.render(scene, camera);
@@ -126,22 +144,22 @@ window.onresize = () => {
 // Orbit Mode
 window.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
-    fatman.position.set(0, 0, 0)
-    fatman.scale.set(2, 2, 2)
-    littleBoy.position.set(0, 0, -30)
+    fatman.position.set(0, 0, 0);
+    fatman.scale.set(2, 2, 2);
+    littleBoy.position.set(0, 0, 0);
+    // camera.position.z = 20
     const zIndexMain = -1;
     const zIndexCanvas = 1;
 
+    var audio = document.getElementById("backgroundAudio");
+
     if (!audio.paused) {
       audio.pause();
-      isSectionTwoVisible = false;
-      console.log(isSectionTwoVisible);
-      console.log("Audio Pause");
     }
 
-    let guide = document.querySelector(".guide > h3");
+    let guide = document.querySelector(".guideContent");
     guide.innerHTML = 'Press "Space" to Enter View Mode';
-
+    console.log("changed");
     canvas.style.zIndex = zIndexCanvas;
     document.querySelector(".main").style.zIndex = zIndexMain;
   }
@@ -157,23 +175,16 @@ window.addEventListener("keydown", (event) => {
     const zIndexCanvas = 1;
 
     if (isOrbitMode) {
+      fatman.position.set(0, 2, -10);
+      littleBoy.position.set(0, 2, -40);
       canvas.style.zIndex = zIndexMain;
       document.querySelector(".main").style.zIndex = zIndexCanvas;
-      camera.position.x = 0
-      camera.position.y = 0
+      camera.position.x = 0;
+      camera.position.y = 0;
       camera.position.z = 5;
       camera.lookAt(0, 0, 0);
-      // fatman.rotation.y = Math.PI / -5;
-      // fatman.rotation.x = Math.PI / 5;
-      // fatman.position.set(0, 1, 50);
-      // fatman.scale.set(8, 8, 8);
-      // littleBoy.rotation.y = Math.PI / 3.9;
-      // littleBoy.rotation.x = Math.PI / 5;
-      // littleBoy.position.set(0, 1, -500);
-      // littleBoy.scale.set(1, 1, 1);
-     
-      let guide = document.querySelector(".guide > h3");
-      guide.innerHTML = 'Press "Space" to Enter Orbit Mode';
+      let guide = document.querySelector(".guideContent");
+      guide.innerHTML = 'Press "Space" to Enter Orbit  Mode';
     } else {
       canvas.style.zIndex = zIndexCanvas;
       document.querySelector(".main").style.zIndex = zIndexMain;
@@ -188,7 +199,7 @@ function showLittleBoy() {
     scene.add(littleBoy);
     scene.remove(fatman);
     // orbitMode()
-  } 
+  }
 }
 
 function showFatman() {
