@@ -2,9 +2,12 @@
 @import url("https://fonts.cdnfonts.com/css/iciel-gotham");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
-* {
+*,
+*::before,
+*::after{
   margin: 0;
   padding: 0;
+  box-sizing: inherit;
 }
 
 html,
@@ -88,6 +91,7 @@ canvas {
   100% {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(5);
   }
 }
 
@@ -208,7 +212,7 @@ canvas {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: orange;
+  background-color: #DB6429;
   color: white;
   font-size: 65px;
   font-family: Montserrat;
@@ -238,4 +242,261 @@ canvas {
   word-wrap: break-word;
   text-align: justify;
   width: 90%;
+}
+
+/* canvas.webgl {
+ position: absolute;
+  top: 0;
+  z-index: -1;
+  left: 0;
+  
+} */
+
+.sectionThree{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+}
+
+.sectionThree img {
+  margin-left: 15%;
+  width: 100%;
+  height: 100%;
+}
+
+.descriptionTwo{
+  opacity: 1;
+  margin-left: 5%;
+  margin-top: 1%;
+}
+
+.descriptionTwo > #title {
+  text-align: left;
+  font-weight: 400;
+  color: white;
+  font-size: 45px;
+  font-family: "iCiel Gotham", sans-serif;
+}
+
+.descriptionTwo > #description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #DB6429;
+  color: white;
+  font-size: 65px;
+  font-family: Montserrat;
+  font-weight: 900;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  width: 350px;
+  height: 65px;
+}
+
+.descriptionTwo > #garis {
+  width: 500px;
+  height: 5px;
+  margin-top: 3%;
+  background-color: white;
+}
+
+.descriptionTwo > #content {
+  margin-top: 2%;
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 22px;
+  font-family: Montserrat;
+  font-weight: 600;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  text-align: justify;
+  width: 150%;
+}
+
+.sectionFour{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+}
+/* 
+.sectionFour img {
+  margin-left: 5%;
+  width: 100%;
+  height: 100%;
+} */
+
+.descriptionThree{
+  opacity: 1;
+  margin-left: 40%;
+  margin-top: 5%;
+}
+
+.descriptionThree > #title {
+  text-align: left;
+  font-weight: 400;
+  color: white;
+  font-size: 45px;
+  font-family: "iCiel Gotham", sans-serif;
+}
+
+.descriptionThree > #description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #DB6429;
+  color: white;
+  font-size: 65px;
+  font-family: Montserrat;
+  font-weight: 900;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  width: 720px;
+  height: 65px;
+}
+
+.descriptionThree > #garis {
+  width: 750px;
+  height: 5px;
+  margin-top: 3%;
+  background-color: white;
+}
+
+.descriptionThree > #content {
+  margin-top: 2%;
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 22px;
+  font-family: Montserrat;
+  font-weight: 600;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  text-align: justify;
+  width: 91%;
+}
+
+.sectionFive{
+  height: 100vh;
+  width: 100vw;
+
+}
+
+.descriptionFour{
+  margin-top: 5%;
+  margin-left: 5%;
+}
+
+.descriptionFour > #title {
+  text-align: left;
+  font-weight: 400;
+  color: white;
+  font-size: 45px;
+  font-family: "iCiel Gotham", sans-serif;
+}
+
+.descriptionFour > #description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #DB6429;
+  color: white;
+  font-size: 65px;
+  font-family: Montserrat;
+  font-weight: 900;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  width: 870px;
+  height: 65px;
+}
+
+.bombs{
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  gap: 30%;
+  justify-content: space-around;
+}
+
+.little_boy{
+  margin-left: 5%;
+  margin-block-start: 10%;
+}
+
+.fatman{
+  margin-block-start: 5%;
+}
+
+.little_boy > #bombTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #DB6429;
+  color: white;
+  font-size: 45px;
+  font-family: Montserrat;
+  font-weight: 900;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  width: 250px;
+  height: 65px;
+}
+
+.fatman > #bombTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #DB6429;
+  color: white;
+  font-size: 45px;
+  font-family: Montserrat;
+  font-weight: 900;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  width: 250px;
+  height: 65px;
+}
+
+.little_boy > #garis {
+  width: 300px;
+  height: 5px;
+  margin-top: 1.5%;
+  background-color: white;
+}
+
+.fatman > #garis {
+  width: 300px;
+  height: 5px;
+  margin-top: 1.5%;
+  background-color: white;
+}
+
+.little_boy > #bombContent {
+  margin-top: 1%;
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 18px;
+  font-family: Montserrat;
+  font-weight: 600;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  text-align: justify;
+  width: 80%;
+}
+
+.fatman > #bombContent {
+  margin-top: 1%;
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 18px;
+  font-family: Montserrat;
+  font-weight: 600;
+  letter-spacing: 1.17px;
+  word-wrap: break-word;
+  text-align: justify;
+  width: 80%;
 }

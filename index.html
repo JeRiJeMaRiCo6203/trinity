@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <title>TRINITY &centerdot; MANHATTAN PROJECT</title>
+    <link rel="icon" type="image/x-icon" href="./img/favicon.png" />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -35,6 +35,7 @@
         </h2>
         <img src="./img/Ellipse 1.png" alt="" />
       </section>
+
       <section class="sectionTwo">
         <img src="./img/Oppy 1.png" alt="" />
         <audio id="backgroundAudio" loop>
@@ -61,8 +62,82 @@
           </div>
         </div>
       </section>
+
       <section class="sectionThree">
-        <canvas class="top-0 left-0 z-[-1]" id="webgl"></canvas>
+        <div class="descriptionTwo">
+          <div id="title">Apa itu</div>
+          <div id="description">
+            <q>TRINITY</q>
+          </div>
+          <div id="garis">&nbsp;</div>
+          <div id="content">
+            Dalam konteks Proyek Manhattan, "Trinity" adalah kode nama untuk uji
+            coba pertama bom atom yang berlangsung di Alamogordo, New Mexico,
+            pada tanggal 16 Juli 1945. Uji coba ini menandai tonggak penting
+            dalam pengembangan senjata nuklir selama Perang Dunia II,
+            membuktikan keberhasilan proyek tersebut dan mengawali era baru
+            dalam sejarah senjata dengan potensi penghancuran masif.
+          </div>
+        </div>
+        <img
+          src="./img/bomb-explosion-with-fire-flames-and-smoke-isolated-on-transparent-background-png 2.png"
+          alt=""
+        />
+      </section>
+      <!-- <canvas class="webgl"></canvas> -->
+
+      <section class="sectionFour">
+        <img src="" alt="" />
+        <div class="descriptionThree">
+          <div id="title">Perhitungan</div>
+          <div id="description">
+            <q>ATOMIC PARTICLE</q>
+          </div>
+          <div id="garis">&nbsp;</div>
+          <div id="content">
+            Hukum Relativitas, khususnya Teori Relativitas Khusus oleh Albert
+            Einstein, menggambarkan hubungan antara gerakan benda dengan
+            kecepatan tinggi dan bagaimana waktu, ruang, dan massa berubah
+            sebagai hasilnya. Dalam konteks kimia, ini memiliki dampak pada
+            pergesekan elektron dalam atom dan molekul. Ketika elektron bergerak
+            dengan kecepatan mendekati kecepatan cahaya, hukum relativitas dapat
+            menyebabkan perubahan dalam perilaku elektron dan mempengaruhi
+            sifat-sifat kimia atom dan molekul.
+          </div>
+        </div>
+      </section>
+
+      <section class="sectionFive">
+        <div class="descriptionFour">
+          <div id="title">Bom Atom Pertama</div>
+          <div id="description">
+            <q>FATMAN & LITTLE BOY</q>
+          </div>
+        </div>
+
+        <div class="bombs">
+          <div class="little_boy">
+          <div id="bombTitle">
+            <i>Little Boy</i>
+          </div>
+          <div id="garis">&nbsp;</div>
+          <div id="bombContent">
+            Little Boy adalah bom atom pertama yang dijatuhkan pada 6 Agustus 1945, di Hiroshima, Jepang, oleh pesawat B-29 Enola Gay. Dengan desain senjata meriam uranium-235, ledakan ini memainkan peran kunci dalam mengakhiri Perang Dunia II.
+          </div>
+        </div>
+        
+        <div class="fatman">
+          <div id="bombTitle">
+            <i>Fatman</i>
+          </div>
+          <div id="garis">&nbsp;</div>
+          <div id="bombContent">
+            Fat Man, bom atom kedua, dijatuhkan di Nagasaki pada 9 Agustus 1945, oleh pesawat B-29 Bockscar. Menggunakan desain plutonium-239 implosif, ledakan Fat Man di Nagasaki berkontribusi pada keputusan Jepang untuk menyerah, menandai akhir Perang Dunia II.
+          </div>
+        </div>
+        </div>
+        
+        
       </section>
     </main>
 
@@ -111,12 +186,11 @@
           document.querySelector(".waviy").style.display = "none";
           document.body.style.overflowX = "hidden";
           document.querySelector("main").style.display = "block";
-          document.querySelector("#webgl").style.display = "block";
-        }, 7000);
+        }, 1000);
       });
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.0/gsap.min.js"></script>
+    <script src="./scrollreveal.min.js"></script>
     <script type="module" src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
   </body>
 </html>
