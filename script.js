@@ -3,6 +3,8 @@ console.log("connected");
 import * as THREE from "./Three JS/build/three.module.js";
 import { GLTFLoader } from "./Three JS/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "./Three JS/examples/jsm/controls/OrbitControls.js";
+import { TessellateModifier } from "./Three JS/examples/jsm/modifiers/TessellateModifier.js";
+import { vertShader, fragShader, uniforms } from "./shader.js";
 
 const canvas = document.querySelector("canvas.webgl");
 
@@ -10,13 +12,7 @@ var raycast = new THREE.Raycaster();
 var pointer = new THREE.Vector2();
 
 const scene = new THREE.Scene();
-let fatman, littleBoy, skybox;
-// const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
-// const cubeMaterial = new THREE.MeshBasicMaterial({
-//   color: 0xff0000
-// })
-// const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-// scene.add(cube)
+let fatman, littleBoy, skybox, explosion;
 
 const gltfLoader = new GLTFLoader();
 
@@ -44,7 +40,7 @@ gltfLoader.load("./little boy/scene.gltf", function (gltf) {
   littleBoy = gltf.scene;
   littleBoy.rotation.y = Math.PI / 4;
   littleBoy.rotation.x = Math.PI / 8;
-  littleBoy.position.set(0, 2, -60);
+  littleBoy.position.set(0, 2, -400);
   littleBoy.scale.set(1, 1, 1);
   // scene.add(littleBoy);
 
@@ -57,6 +53,15 @@ gltfLoader.load("./little boy/scene.gltf", function (gltf) {
 
   animate();
 });
+
+function createExplosion() {
+  gltfLoader.load("./explosionII/scene.gltf", function (gltf) {
+    explosion = gltf.scene;
+    explosion.position.z = -300;
+    explosion.position.y = -10;
+    scene.add(explosion);
+  });
+}
 
 function createSkybox() {
   const boxGeo = new THREE.BoxGeometry(1000, 1000, 1000);
@@ -92,7 +97,7 @@ function createSkybox() {
 
   skybox = new THREE.Mesh(boxGeo, boxMaterialArray);
 
-  scene.add(skybox)
+  scene.add(skybox);
 }
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / innerHeight);
@@ -126,18 +131,33 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.addEventListener("change", renderer);
 
-// let isCircling = false;
+let isRayIntersected = false;
 
 function onMouseDown(event) {
   event.preventDefault();
-  // console.log("mouse clicked!");
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  raycast.setFromCamera(pointer, camera);
-  const intersects = raycast.intersectObjects(scene.children, true);
-  if (intersects.length > 0) {
-    console.log("text clicked!");
-    // circleFatman()
+
+  if (isRayIntersected) {
+    return;
+  }
+
+  const canvasZIndex = parseInt(canvas.style.zIndex);
+
+  // Check if canvas is above HTML
+  if (canvasZIndex > 0) {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycast.setFromCamera(pointer, camera);
+    const intersects = raycast.intersectObjects(scene.children, true);
+
+    if (intersects.length > 0) {
+      console.log("text clicked!");
+      // make bomb explosion animation
+      scene.remove(fatman);
+      scene.remove(littleBoy);
+      createExplosion();
+
+      isRayIntersected = true;
+    }
   }
 }
 
@@ -145,7 +165,7 @@ document.addEventListener("click", onMouseDown, false);
 
 function animate() {
   requestAnimationFrame(animate);
-  
+
   TWEEN.update();
 
   if (fatman) {
@@ -156,12 +176,24 @@ function animate() {
     littleBoy.rotation.y += 0.001;
   }
 
+  if (explosion) {
+    explosion.rotation.y += 0.001;
+  }
+
   if (fatman && fatman.position.z < -2) {
-    fatman.position.z += 0.009;
+    fatman.position.z += 0.0009;
   }
 
   if (littleBoy && littleBoy.position.z < -25) {
-    littleBoy.position.z += 0.009;
+    littleBoy.position.z += 0.01;
+  }
+
+  if (explosion && explosion.position.z < -2) {
+    explosion.position.z += 1;
+  }
+
+  if (explosion && explosion.position.y < -5) {
+    explosion.position.y += 0.01;
   }
 
   renderer.render(scene, camera);
@@ -189,7 +221,7 @@ function handleSpaceKeyPress(event) {
   const zIndexCanvas = 1;
 
   if (isOrbitMode) {
-    scene.remove(skybox)
+    scene.remove(skybox);
     fatman.position.set(0, 2, -10);
     littleBoy.position.set(0, 2, -40);
     canvas.style.zIndex = zIndexMain;
@@ -231,7 +263,10 @@ window.addEventListener("keydown", (event) => {
 function showLittleBoy() {
   if (littleBoy) {
     scene.add(littleBoy);
-    littleBoy.position.set(0, 2, -100);
+    littleBoy.position.set(-2, 2, -60);
+    if (littleBoy && littleBoy.position.z < -25) {
+      littleBoy.position.z += 10;
+    }
     scene.remove(fatman);
     // orbitMode()
   }
@@ -240,6 +275,10 @@ function showLittleBoy() {
 function showFatman() {
   if (fatman) {
     scene.add(fatman);
+    littleBoy.position.set(0, 0, -60);
+    if (littleBoy && littleBoy.position.z < -2) {
+      littleBoy.position.z += 0.01;
+    }
     scene.remove(littleBoy);
     // orbitMode()
   }
