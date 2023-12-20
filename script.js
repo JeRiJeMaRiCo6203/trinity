@@ -10,7 +10,7 @@ var raycast = new THREE.Raycaster();
 var pointer = new THREE.Vector2();
 
 const scene = new THREE.Scene();
-let fatman, littleBoy;
+let fatman, littleBoy, skybox;
 // const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
 // const cubeMaterial = new THREE.MeshBasicMaterial({
 //   color: 0xff0000
@@ -28,7 +28,7 @@ gltfLoader.load("./fatman/scene.gltf", function (gltf) {
   fatman.position.set(0, 2, -10);
   fatman.scale.set(2, 2, 2);
   scene.add(fatman);
-  
+
   // Animate fatman appearance
   const targetPosition = new THREE.Vector3(0, 0, 0);
   new TWEEN.Tween(fatman.position)
@@ -44,7 +44,7 @@ gltfLoader.load("./little boy/scene.gltf", function (gltf) {
   littleBoy = gltf.scene;
   littleBoy.rotation.y = Math.PI / 4;
   littleBoy.rotation.x = Math.PI / 8;
-  littleBoy.position.set(0, 2, -40);
+  littleBoy.position.set(0, 2, -60);
   littleBoy.scale.set(1, 1, 1);
   // scene.add(littleBoy);
 
@@ -57,6 +57,43 @@ gltfLoader.load("./little boy/scene.gltf", function (gltf) {
 
   animate();
 });
+
+function createSkybox() {
+  const boxGeo = new THREE.BoxGeometry(1000, 1000, 1000);
+
+  const textureLoader = new THREE.TextureLoader();
+  // kanan - kiri - atas - bawah - depan - belakang
+  const boxMaterialArray = [
+    new THREE.MeshBasicMaterial({
+      map: textureLoader.load("./Assets/daylight_box_right.jpg"),
+      side: THREE.DoubleSide,
+    }),
+    new THREE.MeshBasicMaterial({
+      map: textureLoader.load("./Assets/daylight_box_left.jpg"),
+      side: THREE.DoubleSide,
+    }),
+    new THREE.MeshBasicMaterial({
+      map: textureLoader.load("./Assets/daylight_box_top.jpg"),
+      side: THREE.DoubleSide,
+    }),
+    new THREE.MeshBasicMaterial({
+      map: textureLoader.load("./Assets/daylight_box_bottom.jpg"),
+      side: THREE.DoubleSide,
+    }),
+    new THREE.MeshBasicMaterial({
+      map: textureLoader.load("./Assets/daylight_box_front.jpg"),
+      side: THREE.DoubleSide,
+    }),
+    new THREE.MeshBasicMaterial({
+      map: textureLoader.load("./Assets/daylight_box_back.jpg"),
+      side: THREE.DoubleSide,
+    }),
+  ];
+
+  skybox = new THREE.Mesh(boxGeo, boxMaterialArray);
+
+  scene.add(skybox)
+}
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / innerHeight);
 
@@ -89,6 +126,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.addEventListener("change", renderer);
 
+// let isCircling = false;
+
 function onMouseDown(event) {
   event.preventDefault();
   // console.log("mouse clicked!");
@@ -98,10 +137,7 @@ function onMouseDown(event) {
   const intersects = raycast.intersectObjects(scene.children, true);
   if (intersects.length > 0) {
     console.log("text clicked!");
-    // finalScene();
-    if (fatman) {
-      fatman.rotation.y -= Math.PI/120
-    }
+    // circleFatman()
   }
 }
 
@@ -109,6 +145,9 @@ document.addEventListener("click", onMouseDown, false);
 
 function animate() {
   requestAnimationFrame(animate);
+  
+  TWEEN.update();
+
   if (fatman) {
     fatman.rotation.y += 0.001;
   }
@@ -118,11 +157,11 @@ function animate() {
   }
 
   if (fatman && fatman.position.z < -2) {
-    fatman.position.z += 0.0009;
+    fatman.position.z += 0.009;
   }
 
   if (littleBoy && littleBoy.position.z < -25) {
-    littleBoy.position.z += 0.01;
+    littleBoy.position.z += 0.009;
   }
 
   renderer.render(scene, camera);
@@ -141,15 +180,31 @@ window.onresize = () => {
   camera.updateProjectionMatrix();
 };
 
-// Orbit Mode
-window.addEventListener("keydown", (event) => {
-  if (event.code === "Space") {
+let isOrbitMode = false;
+let isSkyboxInScene = false;
+
+function handleSpaceKeyPress(event) {
+  event.preventDefault();
+  const zIndexMain = -1;
+  const zIndexCanvas = 1;
+
+  if (isOrbitMode) {
+    scene.remove(skybox)
+    fatman.position.set(0, 2, -10);
+    littleBoy.position.set(0, 2, -40);
+    canvas.style.zIndex = zIndexMain;
+    document.querySelector(".main").style.zIndex = zIndexCanvas;
+    camera.position.x = 0;
+    camera.position.y = 0;
+    camera.position.z = 5;
+    camera.lookAt(0, 0, 0);
+    let guide = document.querySelector(".guideContent");
+    guide.innerHTML = 'Press "Space" to Enter Orbit Mode';
+  } else {
+    createSkybox();
     fatman.position.set(0, 0, 0);
     fatman.scale.set(2, 2, 2);
     littleBoy.position.set(0, 0, 0);
-    // camera.position.z = 20
-    const zIndexMain = -1;
-    const zIndexCanvas = 1;
 
     var audio = document.getElementById("backgroundAudio");
 
@@ -163,40 +218,20 @@ window.addEventListener("keydown", (event) => {
     canvas.style.zIndex = zIndexCanvas;
     document.querySelector(".main").style.zIndex = zIndexMain;
   }
-});
 
-// Reverse Action
-let isOrbitMode = false;
+  isOrbitMode = !isOrbitMode;
+}
 
 window.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
-    event.preventDefault();
-    const zIndexMain = -1;
-    const zIndexCanvas = 1;
-
-    if (isOrbitMode) {
-      fatman.position.set(0, 2, -10);
-      littleBoy.position.set(0, 2, -40);
-      canvas.style.zIndex = zIndexMain;
-      document.querySelector(".main").style.zIndex = zIndexCanvas;
-      camera.position.x = 0;
-      camera.position.y = 0;
-      camera.position.z = 5;
-      camera.lookAt(0, 0, 0);
-      let guide = document.querySelector(".guideContent");
-      guide.innerHTML = 'Press "Space" to Enter Orbit  Mode';
-    } else {
-      canvas.style.zIndex = zIndexCanvas;
-      document.querySelector(".main").style.zIndex = zIndexMain;
-    }
-
-    isOrbitMode = !isOrbitMode;
+    handleSpaceKeyPress(event);
   }
 });
 
 function showLittleBoy() {
   if (littleBoy) {
     scene.add(littleBoy);
+    littleBoy.position.set(0, 2, -100);
     scene.remove(fatman);
     // orbitMode()
   }

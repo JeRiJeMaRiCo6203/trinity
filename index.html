@@ -48,12 +48,12 @@
           />
         </audio>
         <div class="descriptionOne">
-          <div id="title">Proyek</div>
-          <div id="description">
+          <div class="title" id="title">Proyek</div>
+          <div class="description" id="description">
             <q>MANHATTAN</q>
           </div>
-          <div id="garis">&nbsp;</div>
-          <div id="content">
+          <div class="garis" id="garis">&nbsp;</div>
+          <div class="content" id="content">
             Dr. J. Robert Oppenheimer, sebagai direktur ilmiah Proyek Manhattan,
             memimpin tim ilmuan untuk mengembangkan bom atom selama Perang Dunia
             II, merasa terbebani oleh dampak potensial senjata nuklir, tetapi
@@ -148,7 +148,7 @@
     </main>
 
     <script src="https://unpkg.com/browse/three@0.146.0/build/three.min.js"></script>
-    <!-- <script src="./scrollreveal.min.js"></script> -->
+    <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/21.0.0/tween.umd.js"></script>
@@ -203,5 +203,27 @@
         }, 7000);
       });
     </script>
+
+    <!-- <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        /*=============== SCROLL REVEAL ANIMATION ===============*/
+        const sr = ScrollReveal({
+          origin: "top",
+          distance: "10px",
+          duration: 2000,
+          //reset: true,
+        });
+
+        sr.reveal(
+          ` .descriptionOne, .descriptionTwo, .descriptionThree, .descriptionFour, .bombs`,
+          {
+            interval: 200,
+            afterReveal: () => {
+              console.log("description revealed");
+            },
+          }
+        );
+      });
+    </script> -->
   </body>
 </html>
